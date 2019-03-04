@@ -1,10 +1,8 @@
-SRC = front_times array_count9 string_match string_splosion \
-	double_char end_other xyz_there \
-	count_events big_diff centered_average \
-	class
+SRC = *.py
 
-all: $(SRC)
+# Explicit .PHONY because $(SRC) files exist -> MAKE wouldn't run the rule (that invokes python) with them as goal
+.PHONY test_all: $(SRC)
 
-$(SRC): 
-	python $@.py
+.PHONY $(SRC): 
+	python3.6 $@
 
