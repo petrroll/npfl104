@@ -1,15 +1,19 @@
 import pandas as pd
 
-def run(train, test, target_col, model_constructor, **model_args):
+# cuts pd dataframe into two numpy arrays, one with features the other with targets
+def prepare_data(data, target_col='target'):
+    features = pd.get_dummies(data.drop(target_col, axis=1)).values
+    targets = data[target_col].cat.codes
+
+    return (features, targets)
+
+
+def run(train, test, target_col, model):
     # prepare data in np.array formats
-    train_i = pd.get_dummies(train.drop(target_col, axis=1)).values
-    train_t = train[target_col].cat.codes
+    train_i, train_t = prepare_data(train, target_col) 
+    test_i, test_t = prepare_data(test, target_col) 
 
-    test_i = pd.get_dummies(test.drop(target_col, axis=1)).values
-    test_t = test[target_col].cat.codes
-
-    # create & build model
-    model = model_constructor(**model_args)
+    # build model
     model.Build(train_i, train_t)
 
     # test model
