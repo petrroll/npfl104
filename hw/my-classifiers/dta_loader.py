@@ -24,19 +24,20 @@ def load_adult():
     names = list(types.keys())
 
     # load data
-    train = pd.read_csv('./adult/adult.data', names=names, dtype=types, index_col=False, skipinitialspace=True)
-    test = pd.read_csv('./adult/adult.test', names=names, dtype=types, index_col=False, skipinitialspace=True, skiprows=1)
+    train = pd.read_csv('./adult/adult.data', names=names, na_values="?", dtype=types, index_col=False, skipinitialspace=True)
+    test = pd.read_csv('./adult/adult.test', names=names, na_values="?", dtype=types, index_col=False, skipinitialspace=True, skiprows=1)
 
     # merge data so that we have info about all potential classes & can process everything at once
     train_size = len(train)
     tog = train.append(test)
 
-    # change object (string) columns to category type
-    for col in tog.columns[np.where(tog.dtypes == 'object')]:
-        tog[col] = tog[col].astype('category')
-
     # clean data
     tog['target'] = tog['target'].str.rstrip('.')
+
+    # change object (string) columns to category type
+    for col in tog.columns[np.where(tog.dtypes == 'object')]:
+        tog[col] = pd.Categorical(tog[col])
+
 
     return (tog[:train_size], tog[train_size:])
 
