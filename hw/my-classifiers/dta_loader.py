@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-def load_adult():
+def load_adult(normalize = True, bucket = 0):
     # dta description
     types = {
         'age': 'int64',
@@ -34,12 +34,27 @@ def load_adult():
     # clean data
     tog['target'] = tog['target'].str.rstrip('.')
 
+    return process_dta(tog, train_size, normalize, bucket)
+
+
+def process_dta(tog, train_size, normalize=False, bucket = 0):
     # change object (string) columns to category type
     for col in tog.columns[np.where(tog.dtypes == 'object')]:
         tog[col] = pd.Categorical(tog[col])
 
+    # bucket int64 columns
+    if bucket != 0:
+        for col in tog.columns[np.where(tog.dtypes == 'int64')]:
+            tog[col] = pd.qcut(tog[col], bucket, labels=False, duplicates='drop').astype('category')
+
+    # normalize int64 columns
+    if normalize:
+        for col in tog.columns[np.where(tog.dtypes == 'int64')]:
+            tog[col] -= tog[col].min()
+            tog[col] /= tog[col].max() - tog[col].min()
 
     return (tog[:train_size], tog[train_size:])
+
 
 def load_synth(name_base):
     # dta description
@@ -61,10 +76,7 @@ def load_synth(name_base):
     tog = train.append(test)
 
     # change object (string) columns to category type
-    for col in tog.columns[np.where(tog.dtypes ==   'object')]:
-        tog[col] = tog[col].astype('category')
-
-    return (tog[:train_size], tog[train_size:])
+    return process_dta(tog, train_size)
 
 def load_synth_sep():
     return load_synth('artificial_separable')
