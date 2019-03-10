@@ -3,6 +3,9 @@ import pandas as pd
 from models.model import *
 
 class Perc(Model):
+    '''
+    Perceptron model, assumes only two target classes with values 0/1.
+    '''
     def __init__(self, lr = 0.03):
         self.lr = lr
 
@@ -17,7 +20,7 @@ class Perc(Model):
         for i in range(1, len(targets)):
             result = np.dot(b[i], w) > 0
             if result != targets[i]:
-                w = w - self.lr * (w - b[i]) * (targets[i] - result)
+                w = w - self.lr * (w - b[i]) * (targets[i] - result) # w -= lr * (w-b[i]) * errorPolarity
 
         self.w = w
 

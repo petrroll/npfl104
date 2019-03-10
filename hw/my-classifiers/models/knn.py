@@ -3,6 +3,9 @@ import pandas as pd
 from models.model import *
 
 class KNN(Model):
+    '''
+    Naive knn model with linear scaning of training data.
+    '''
     def __init__(self, k, dim_weights = None, dist_w = False):
         self.k = k
         self.dim_weights = dim_weights
