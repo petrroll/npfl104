@@ -11,4 +11,4 @@ a_train, a_test = load_synth_sep()
 print(run(a_train, a_test, 'target', Perc(0.5, 0.9, 10)))
 
 a_train, a_test = load_adult()
-print(run(a_train, a_test, 'target', Perc(0.05, 0.85, 20)))
+print(run(a_train, a_test, 'target', Perc(0.025, 0.85, 20)))
