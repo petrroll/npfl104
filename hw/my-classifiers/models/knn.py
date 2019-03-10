@@ -1,6 +1,5 @@
 import numpy as np
-import pandas as pd
-from models.model import *
+from models.model import Model
 
 class KNN(Model):
     '''
