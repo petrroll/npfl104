@@ -4,10 +4,10 @@ from validation_runner import run
 import time
 
 a_train, a_test = load_synth_noise()
-print(run(a_train, a_test, 'target', KNN(k=3)))
+print("Artif noise:\t", run(a_train, a_test, 'target', KNN(k=3)))
 
 a_train, a_test = load_synth_sep()
-print(run(a_train, a_test, 'target', KNN(k=3)))
+print("Artif sep:\t", run(a_train, a_test, 'target', KNN(k=3)))
 
 a_train, a_test = load_adult(True, 0)
-print(run(a_train, a_test, 'target', KNN(k=5)))
+print("Adult:\t", run(a_train, a_test, 'target', KNN(k=5)))
