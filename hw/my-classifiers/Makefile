@@ -1,5 +1,17 @@
-all: perc knn nb
+# Based on: https://blog.horejsek.com/makefile-with-python/
+VENV_NAME?=env
+PYTHON=$(VENV_NAME)/bin/python
+PYTHON_GLOBAL=python3
 
+ALGS=perc nb knn
+
+# Alg runners
+all: $(ALGS)
+
+$(ALGS): download $(VENV_NAME)
+	$(PYTHON) $(@)_runner.py
+
+# Data download
 artificial_objects:
 	wget https://ufal.mff.cuni.cz/~zabokrtsky/courses/npfl104/data/classification/artificial_objects.tgz
 	tar -xvz --one-top-level -f artificial_objects.tgz
@@ -10,12 +22,24 @@ adult:
 
 download: adult artificial_objects
 
-nb: download
-	python3 naive_bayes_runner.py
+clean_download:
+	rm -r artificial_objects
+	rm -r adult
 
-knn: download
-	python3 knn_runner.py
 
-perc: download
-	python3 perc_runner.py
+# ENV
+$(VENV_NAME): requirements.txt
+	@test -d $(VENV_NAME) || $(PYTHON_GLOBAL) -m venv $(VENV_NAME)
+	$(PYTHON) -m pip install -r requirements.txt
+
+clean_$(VENV_NAME): 
+	rm -r $(VENV_NAME)
+
+# Common:
+clean_pycache:
+	rm -r __pycache__
+	rm -r models/__pycache__
+
+clean: clean_$(VENV_NAME) clean_download clean_pycache
+
 
