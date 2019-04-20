@@ -1,0 +1,1 @@
+stmon,styear,settle,fatality,maxdur,hiact,hostlev,recip,numa,numb,outcome
