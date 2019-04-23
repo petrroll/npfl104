@@ -20,7 +20,7 @@ from sklearn.linear_model import LogisticRegression
 # Loads dataset & processes it:
 # - fills NA data
 # - processes categorical data so that categories from both train&test are known
-def load_dataset(dataset):
+def load_dataset(dataset, drop_columns):
     df_train = pd.read_csv("./2019-npfl104-shared/data/"+dataset+"/train.txt.gz", header=None)
     df_test = pd.read_csv("./2019-npfl104-shared/data/"+dataset+"/test.txt.gz", header=None)
 
@@ -30,6 +30,9 @@ def load_dataset(dataset):
     for col in df_tog.columns[np.where(df_tog.dtypes == 'object')]:
         df_tog[col] = pd.Categorical(df_tog[col])
         
+    if drop_columns:
+        df_tog = df_tog.drop(drop_columns, axis=1)
+
     df_train, df_test = df_tog[:train_size], df_tog[train_size:]
     
     df_train = df_train.fillna(df_train.mode().iloc[0])
@@ -55,7 +58,7 @@ def create_classifiers():
         (DecisionTreeClassifier(max_depth=5), "DecisionTreeClassifier", "max_depth=5"),
         (RandomForestClassifier(max_depth=5, n_estimators=10, max_features=1), "RandomForestClassifier", "max_depth=5, n_estimators=10, max_features=1"),
         #(MLPClassifier(), "MLPClassifier", "default"),
-        (AdaBoostClassifier(), "AdaBoostClassifier", "default"),
+        #(AdaBoostClassifier(), "AdaBoostClassifier", "default"),
         (GaussianNB(), "GaussianNB", "default"),
         (LogisticRegression(multi_class='auto', solver='lbfgs'), "LogisticRegression", "multi_class='auto', solver='lbfgs'")
         #QuadraticDiscriminantAnalysis()
@@ -80,7 +83,8 @@ def run_def_datasets(dtsets):
     
     for dtst in datasets:
         dtset_name, _ = dtst
-        df_train, df_test = load_dataset(dtset_name)
+        drop_columns =  None if dtset_name != "czech-car-accidents" else [4]    # Drop datum+time column else onehot explosion 
+        df_train, df_test = load_dataset(dtset_name, drop_columns)              #TODO: Config based dropping
         run_classifiers(df_train, df_test, dtst)
 
 def main():
