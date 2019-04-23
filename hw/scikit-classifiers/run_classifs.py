@@ -27,9 +27,18 @@ def load_dataset(dataset, drop_columns):
     train_size = len(df_train)
     df_tog = df_train.append(df_test)
 
+    # Convert to categorical
     for col in df_tog.columns[np.where(df_tog.dtypes == 'object')]:
         df_tog[col] = pd.Categorical(df_tog[col])
+
+    # Drop too unique columns e.g. ids
+    for col in df_tog.columns:
+        idlike_col = []
+        if df_tog[col].nunique() > 0.6 * len(df_tog):
+            idlike_col.append(col)
+    df_tog = df_tog.drop(idlike_col, axis=1)
         
+    # Explicitely drop specified columns
     if drop_columns:
         df_tog = df_tog.drop(drop_columns, axis=1)
 
@@ -58,7 +67,7 @@ def create_classifiers():
         (DecisionTreeClassifier(max_depth=5), "DecisionTreeClassifier", "max_depth=5"),
         (RandomForestClassifier(max_depth=5, n_estimators=10, max_features=1), "RandomForestClassifier", "max_depth=5, n_estimators=10, max_features=1"),
         #(MLPClassifier(), "MLPClassifier", "default"),
-        #(AdaBoostClassifier(), "AdaBoostClassifier", "default"),
+        (AdaBoostClassifier(), "AdaBoostClassifier", "default"),
         (GaussianNB(), "GaussianNB", "default"),
         (LogisticRegression(multi_class='auto', solver='lbfgs'), "LogisticRegression", "multi_class='auto', solver='lbfgs'")
         #QuadraticDiscriminantAnalysis()
