@@ -8,7 +8,7 @@ run: 2019-npfl104-shared $(VENV_NAME)
 
 2019-npfl104-shared: $(VENV_NAME)
 	@test -d 2019-npfl104-shared || git clone ssh://gitolite@redmine.ms.mff.cuni.cz/undergrads/student/2019-npfl104-shared.git
-	@test -d 2019-npfl104-shared || $(MAKE) -C "./2019-npfl104-shared/data/czech-car-accidents"
+	$(MAKE) -C "./2019-npfl104-shared/data/czech-car-accidents"
 
 # ENV
 $(VENV_NAME): requirements.txt
