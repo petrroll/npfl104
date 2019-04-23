@@ -16,14 +16,14 @@ $(VENV_NAME): requirements.txt
 	$(PYTHON) -m pip install -r requirements.txt
 
 clean_$(VENV_NAME): 
-	@test -d $(VENV_NAME) && rm -r $(VENV_NAME)
+	rm -rf $(VENV_NAME)
 
 # Common:
 clean_pycache:
-	@test -d __pycache__ && rm -r __pycache__
+	rm -rf __pycache__
 
 clean_data:
-	@test -d 2019-npfl104-shared && rm -r 2019-npfl104-shared
+	rm -rf 2019-npfl104-shared
 
 clean: clean_$(VENV_NAME) clean_data clean_pycache 
 
