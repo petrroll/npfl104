@@ -94,7 +94,13 @@ def run_def_datasets(dtsets):
     
     for dtst in datasets:
         dtset_name, _ = dtst
-        drop_columns =  None if dtset_name != "czech-car-accidents" else [4]    # Drop datum+time column else onehot explosion 
+
+        drop_columns = None
+        if dtset_name == "czech-car-accidents":
+             drop_columns = [4]    # Drop datum+time column else onehot explosion 
+        elif dtset_name == 'netmetr':
+            drop_columns = [0, 1]
+
         df_train, df_test = load_dataset(dtset_name, drop_columns)              #TODO: Config based dropping
         run_classifiers(df_train, df_test, dtst)
 
