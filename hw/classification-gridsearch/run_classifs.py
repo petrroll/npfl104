@@ -74,7 +74,9 @@ res = gs.fit(get_X(dftr), get_Y(dftr))
 print("Best params: " +  str(res.best_params_))
 
 heat_score = res.cv_results_['mean_test_score'].reshape(len(parameters['gamma']),len(parameters['C']))
-fig = sns.heatmap(heat_score)
+fig = sns.heatmap(heat_score, annot=True, fmt=".4f", center = 0.8, xticklabels=parameters['gamma'], yticklabels=parameters['C'])
+fig.set_xlabel("Gamma")
+fig.set_ylabel("C")
 fig.figure.savefig("heatmap.png")
 print("Heatmap for GS saved in heatmap.png")
 
