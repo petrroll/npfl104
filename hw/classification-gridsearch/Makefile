@@ -6,7 +6,9 @@ PYTHON_GLOBAL=python3
 run: 2019-npfl104-shared $(VENV_NAME)
 	$(PYTHON) run_classifs.py 2> /dev/null
 
-2019-npfl104-shared: $(VENV_NAME)
+data: 2019-npfl104-shared
+
+2019-npfl104-shared: 
 	@test -d 2019-npfl104-shared || git clone ssh://gitolite@redmine.ms.mff.cuni.cz/undergrads/student/2019-npfl104-shared.git
 
 # ENV
