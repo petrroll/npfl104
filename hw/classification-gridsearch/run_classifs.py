@@ -22,18 +22,11 @@ def load_dataset(dataset, drop_columns=None):
     for col in df_tog.columns[np.where(df_tog.dtypes == 'object')]:
         df_tog[col] = pd.Categorical(df_tog[col])
 
-    # Drop too unique categorical columns that would explode onehot or numerical ids
-    for col in df_tog.columns:
-        idlike_col = []
-        if df_tog[col].nunique() > 0.1 * len(df_tog) and df_tog[col].dtype.name == 'category':
-            idlike_col.append(col)
-        elif df_tog[col].nunique() > 0.8 * len(df_tog) and (df_tog[col].dtype.name == 'int32' or df_tog[col].dtype.name == 'int64'):
-            idlike_col.append(col)
-    df_tog = df_tog.drop(idlike_col, axis=1)
         
     # Explicitely drop specified columns
     if drop_columns:
         df_tog = df_tog.drop(drop_columns, axis=1)
+
 
     df_train, df_test = df_tog[:train_size], df_tog[train_size:]
     
