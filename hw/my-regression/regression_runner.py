@@ -44,6 +44,8 @@ def evaluate_model(model, test):
     err /= len(test)
     return err
 
+def report(name, mse, r2):
+    print(name + "\t" + "MSE: " + str(mse) + "\t sqrt(MSE): " + str(mse ** (1/2)) + "\t R2: " + str(r2))
 
 
 def run_model(dta, name):
@@ -53,7 +55,10 @@ def run_model(dta, name):
     model.Build(get_X(train).values, get_Y(train).values)
 
     mse = evaluate_model(model, test)
-    print("MSE(" + name + "): " + str(mse))
+    tse = (((get_Y(test) - get_Y(test).mean()) ** 2).sum() / len(test)) 
+    r2 = 1-(mse/tse)
+    
+    report(name, mse, r2)
 
 if __name__ == "__main__":
     run_model(get_prague(), "prague")
