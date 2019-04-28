@@ -9,7 +9,7 @@ class KMeansMy(Model):
         self.k = k
         self.iters = iters
 
-        self.inertia_ = 25
+        self.inertia_ = 0
 
     def Build(self, inputs):
         centers = self.__init_centers(inputs)
@@ -68,9 +68,13 @@ class KMeansMy(Model):
         data = input
 
         result = np.zeros(len(data))
+        inertia = 0
         for i in range(len(data)):
-            result[i] = self.__get_closest_center(centers, data, i)
+            best_i = self.__get_closest_center(centers, data, i)
+            result[i] = best_i
+            inertia += np.linalg.norm(data[i] - centers[best_i]) ** 2
         
+        self.inertia_ = inertia
         return result
 
 

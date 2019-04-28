@@ -4,7 +4,7 @@ PYTHON=$(VENV_NAME)/bin/python
 PYTHON_GLOBAL=python3
 
 run: 2019-npfl104-shared $(VENV_NAME)
-	$(PYTHON) run_classifs.py
+	$(PYTHON) run_classifs.py 2> /dev/null
 
 data: 2019-npfl104-shared
 
